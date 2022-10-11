@@ -10,37 +10,45 @@
 // Map for movement keys
 std::map<char, std::vector<float>> moveBindings
 {
-  {'i', {1, 0, 0, 0}},
+  /*{'i', {1, 0, 0, 0}},
   {'o', {1, 0, 0, -1}},
   {'j', {0, 0, 0, 1}},
   {'l', {0, 0, 0, -1}},
   {'u', {1, 0, 0, 1}},
   {',', {-1, 0, 0, 0}},
   {'.', {-1, 0, 0, 1}},
-  {'m', {-1, 0, 0, -1}},
-  {'O', {1, -1, 0, 0}},
-  {'I', {1, 0, 0, 0}},
-  {'J', {0, 1, 0, 0}},
-  {'L', {0, -1, 0, 0}},
-  {'U', {1, 1, 0, 0}},
-  {'<', {-1, 0, 0, 0}},
-  {'>', {-1, -1, 0, 0}},
-  {'M', {-1, 1, 0, 0}},
+  {'m', {-1, 0, 0, -1}},*/
+  {'9', {1, -1, 0, 0}},
+  {'8', {1, 0, 0, 0}},
+  {'7', {1, 1, 0, 0}},
+  {'6', {0, -1, 0, 0}},
+  {'5', {0, 0, 0, 0}},
+  {'4', {0, 1, 0, 0}},
+  {'3', {-1, -1, 0, 0}},
+  {'2', {-1, 0, 0, 0}},
+  {'1', {-1, 1, 0, 0}},
+  {'0', {0, 0, 0, 1}},
+  {'.', {0, 0, 0, -1}}
+  /*
   {'t', {0, 0, 1, 0}},
-  {'b', {0, 0, -1, 0}},
-  {'k', {0, 0, 0, 0}},
-  {'K', {0, 0, 0, 0}}
+  {'b', {0, 0, -1, 0}},*/
+  /*{'w', {1, 0, 0, 0}},
+  {'a', {0, 1, 0, 0}},
+  {'d', {0, -1, 0, 0}},
+  {'s', {-1, 0, 0, 0}},
+  {'q', {0, 0, 0, 1}},
+  {'e', {0, 0, 0, -1}}*/
 };
 
 // Map for speed keys
 std::map<char, std::vector<float>> speedBindings
 {
-  {'q', {1.1, 1.1}},
-  {'z', {0.9, 0.9}},
-  {'w', {1.1, 1}},
-  {'x', {0.9, 1}},
-  {'e', {1, 1.1}},
-  {'c', {1, 0.9}}
+  {'i', {0.1, 0.1}},
+  {'k', {-0.1, -0.1}},
+  {'o', {0.1, 0}},
+  {'l', {-0.1, 0}},
+  {'p', {0, 0.1}},
+  {'ñ', {0, -0.1}}
 };
 
 // Reminder message
@@ -49,32 +57,28 @@ const char* msg = R"(
 Reading from the keyboard and Publishing to Twist!
 ---------------------------
 Moving around:
-   u    i    o
-   j    k    l
-   m    ,    .
-
-For Holonomic mode (strafing), hold down the shift key:
----------------------------
-   U    I    O
-   J    K    L
-   M    <    >
+   7    8    9
+   4    5    6
+   1    2    3
 
 t : up (+z)
 b : down (-z)
 
 anything else : stop
 
-q/z : increase/decrease max speeds by 10%
-w/x : increase/decrease only linear speed by 10%
-e/c : increase/decrease only angular speed by 10%
+i/k : increase/decrease max speeds by 10%
+o/l : increase/decrease only linear speed by 10%
+p/ñ : increase/decrease only angular speed by 10%
 
 CTRL-C to quit
 
 )";
 
 // Init variables
-float speed(0.5); // Linear velocity (m/s)
-float turn(1.0); // Angular velocity (rad/s)
+float initial_linearSpeed = 0.2;
+float initial_yawSpeed = 1.0;
+float speed = initial_linearSpeed; // Linear velocity (m/s)
+float turn = initial_yawSpeed; // Angular velocity (rad/s)
 float x(0), y(0), z(0), th(0); // Forward/backward/neutral direction vars
 char key(' ');
 
@@ -143,8 +147,8 @@ int main(int argc, char** argv)
     else if (speedBindings.count(key) == 1)
     {
       // Grab the speed data
-      speed = speed * speedBindings[key][0];
-      turn = turn * speedBindings[key][1];
+      speed += initial_linearSpeed * speedBindings[key][0];
+      turn += initial_yawSpeed * speedBindings[key][1];
 
       printf("\rCurrent: speed %f\tturn %f | Last command: %c   ", speed, turn, key);
     }
@@ -160,7 +164,7 @@ int main(int argc, char** argv)
       // If ctrl-C (^C) was pressed, terminate the program
       if (key == '\x03')
       {
-        printf("\n\n                 .     .\n              .  |\\-^-/|  .    \n             /| } O.=.O { |\\\n\n                 CH3EERS\n\n");
+        //printf("\n\n                 .     .\n              .  |\\-^-/|  .    \n             /| } O.=.O { |\\\n\n                 CH3EERS\n\n");
         break;
       }
 
