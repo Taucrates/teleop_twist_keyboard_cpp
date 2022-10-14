@@ -75,7 +75,7 @@ CTRL-C to quit
 )";
 
 // Init variables
-float initial_linearSpeed = 0.2;
+float initial_linearSpeed = 0.4;
 float initial_yawSpeed = 1.0;
 float speed = initial_linearSpeed; // Linear velocity (m/s)
 float turn = initial_yawSpeed; // Angular velocity (rad/s)
@@ -118,7 +118,7 @@ int main(int argc, char** argv)
   ros::NodeHandle nh;
 
   // Init cmd_vel publisher
-  ros::Publisher pub = nh.advertise<geometry_msgs::Twist>("cmd_vel", 1);
+  ros::Publisher pub = nh.advertise<geometry_msgs::Twist>("cmd_vel_raw", 1);
 
   // Create Twist message
   geometry_msgs::Twist twist;
